@@ -14,8 +14,8 @@ for k = 1:1:length(lat)-1
     
     %Distance entre deux latitudes ou longitudes
 %     dlat(k) = 6371008*acos(cos(lat1)*cos(lat2)*cos(lon1-lon1)+sin(lat1)*sin(lat2));%distance entre 2 latitudes
-    dlat(k) = real(6371008*acos(cos(lat1)*cos(lat2)+sin(lat1)*sin(lat2)));%distance entre 2 latitudes
-    dlon(k)= real(6371008*acos(cos(lat1)*cos(lat1)*cos(lon2-lon1)+sin(lat1)*sin(lat1)));%distance entre 2 longitudes
+    dlat(k) = 6371008*acos(cos(lat1)*cos(lat2)+sin(lat1)*sin(lat2));%distance entre 2 latitudes
+    dlon(k)=6371008*acos(cos(lat1)*cos(lat1)*cos(lon2-lon1)+sin(lat1)*sin(lat1));%distance entre 2 longitudes
     dalt(k)= alt(k+1)-alt(k);%Distance entre 2 altitudes
     
     %Calcul de la distance totale

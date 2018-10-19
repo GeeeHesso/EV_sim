@@ -8,7 +8,7 @@ disp('Recherche Itinéraire');
 %[x1,y1] = getDirections('46.806679, 7.168778','46.802544, 7.172344',keyAPI);
 %[x1,y1] = getDirections('46.295183, 8.058002','46.297603, 8.044758',keyAPI);
 %[x1,y1] = getDirections('Vissigen, Sion','Murax, Sion',keyAPI);
-%[x1,y1] = getDirections('Vissigen, Sion','Murax, Sion',keyAPI);
+[x1,y1] = getDirections('Martigny','Sion, Valais',keyAPI);
 
 %Recherche altitude de chaque coordonnée GPS
 disp('Recherche Altitude');
@@ -16,7 +16,7 @@ z1 = getElevation(x1, y1, keyAPI);
 
 %% Calcul de la distance et de la pente entre deux coordonnées
 disp('Recherche Distance');
-[d,c_dist,dist_tot, x, y, dvdo] = getDistance(x1, y1);
+[d,c_dist,dist_tot, x, y, z, dvdo] = getDistance(x1, y1, z1);
 
 %% Caractéristiques de l'itinéraire
 disp('Recherche Caractéristiques de la route');
@@ -24,11 +24,11 @@ disp('Recherche Caractéristiques de la route');
 
 %% Détection d'un tunnel ou d'un pont
 %Caractéristiques de détection
+disp('Recherche Infrastructure');
 seuilHaut =0.15; %Pente montante
 seuilBas = -0.15; %Pente descendante
 nivHaut=20; %différence d'altitude positive
 nivBas=-20; %différence d'altitude négative
-
 
 z2 = getBuilding(z1, c_dist,d, seuilHaut, seuilBas ,nivHaut ,nivBas);
 

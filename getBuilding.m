@@ -28,22 +28,21 @@ for k=1:1:length(diff)
         a=2;
         disp('Entrée pont détectée')
     end
-    disp(k);
     %Détection de la sortie d'un pont ou d'un tunnel
     if diff(k)<=seuilBas && a==1 && diffAlti(k)<=nivBas %Détection de la sortie d'un tunnel
         stepOut = k;
         b=1;
         disp('Sortie tunnel détectée')
     elseif diff(k)>=seuilHaut && a==2 && diffAlti(k)>=nivHaut %Détection de la sortie d'un pont
-        stepOut = k
+        stepOut = k;
         b=1;
         disp('Sortie pont détectée')
     end
     
     %Sauvegarde de l'entrée et de la sortie du tunnel
     if a==1 && b==1 || a==2 && b==1
-        tunnel_start(c) = stepIn-5
-        tunnel_stop(c) = stepOut+1
+        tunnel_start(c) = stepIn-5;
+        tunnel_stop(c) = stepOut+1;
         stepIn=0;
         stepOut=0;
         a=0;

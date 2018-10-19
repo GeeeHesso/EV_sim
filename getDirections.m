@@ -31,24 +31,24 @@ switch status{1}{1}
         e = string({e});
         e = char(e);
         [latitude,longitude] = decodeGooglePolyLine(e,0);
-        
-        %Traitement complet de chaque <step>
-        lati=[];
-        longi=[];
-        for k=1:1:length(res4)-1
-            e = res4(k);
-            e = string({e});
-            e = char(e);
-            [lat,lon] = decodeGooglePolyLine(e,0);
-            
-            start=length(lati);
-            for i=1:1:length(lat)
-                lati(i+start)=lat(i);
-                longi(i+start)=lon(i);
-            end
-        end
-        latitude = lati;
-        longitude = longi;
+%         
+%         %Traitement complet de chaque <step>
+%         lati=[];
+%         longi=[];
+%         for k=1:1:length(res4)-1
+%             e = res4(k);
+%             e = string({e});
+%             e = char(e);
+%             [lat,lon] = decodeGooglePolyLine(e,0);
+%             
+%             start=length(lati);
+%             for i=1:1:length(lat)
+%                 lati(i+start)=lat(i);
+%                 longi(i+start)=lon(i);
+%             end
+%         end
+%         latitude = lati;
+%         longitude = longi;
         
     case 'NOT_FOUND'
         error('Google Maps API: NOT FOUND.');
