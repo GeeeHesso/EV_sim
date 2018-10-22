@@ -127,7 +127,7 @@ inter_z2 = np.interp(dist2_end,inter_d2,data_z2)
 # Lissage
 #####################################################
 
-N=9
+N=5
 lissage=(1./N)*np.ones(N)
 
 l_x1=np.convolve(lissage,inter_x1,'same')
@@ -156,8 +156,8 @@ l_x2[-5:]=inter_x2[-5:]
 # Saving file
 #####################################################
 
-np.savetxt('Lisse1.csv',np.array([l_x1,l_y1,l_z1]).T,delimiter=',',newline='\n')
-np.savetxt('Lisse2.csv',np.array([l_x2,l_y2,l_z2]).T,delimiter=',',newline='\n')
+np.savetxt('Lisse1_5.csv',np.array([l_x1,l_y1,l_z1]).T,delimiter=',',newline='\n')
+np.savetxt('Lisse2_5.csv',np.array([l_x2,l_y2,l_z2]).T,delimiter=',',newline='\n')
 
 np.savetxt('Interp1.csv',np.array([inter_x1,inter_y1,inter_z1]).T,delimiter=',',newline='\n')
 np.savetxt('Interp2.csv',np.array([inter_x2,inter_y2,inter_z2]).T,delimiter=',',newline='\n')
