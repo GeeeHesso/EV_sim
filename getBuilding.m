@@ -1,4 +1,4 @@
-function [z2] = getBuilding(z1, c_dist, d, seuilHaut,seuilBas,nivHaut,nivBas)
+function [z2] = getBuilding(z9, c_dist, seuilHaut,seuilBas,nivHaut,nivBas)
 
 a=0;
 b=0;
@@ -11,29 +11,29 @@ diff=0;
 diffAlti=0;
 
 %Calcul de la pente, de la différence d'altitude et de l'angle de la pente
-for k=1:1:length(z1)-1
-    diffAlti(k) = z1(k+1)-z1(k);
-
-    diff(k) = (z1(k+1)-z1(k))/d(k);
+for k=1:1:length(z9)-100
+    diffAlti(k) = z9(k+100)-z9(k);
+    diff(k) = (z9(k+100)-z9(k))/(c_dist(k+100)-c_dist(k));
 end
 
 for k=1:1:length(diff)
     %Détection de l'entrée d'un pont ou d'un tunnel
-    if diff(k)>=seuilHaut && a==0 && diffAlti(k)>=nivHaut %Détection de l'entrée d'un tunnel
+    if  a==0 && diffAlti(k)>=nivHaut %Détection de l'entrée d'un tunnel diff(k)>=seuilHaut &&
         stepIn = k;
         a=1;
         disp('Entrée tunnel détectée')
-    elseif diff(k)<=seuilBas && a==0 && diffAlti(k)<=nivBas %Détection de l'entrée d'un pont
+        disp(k)
+    elseif   a==0 && diffAlti(k)<=nivBas %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
         stepIn = k;
         a=2;
         disp('Entrée pont détectée')
     end
     %Détection de la sortie d'un pont ou d'un tunnel
-    if diff(k)<=seuilBas && a==1 && diffAlti(k)<=nivBas %Détection de la sortie d'un tunnel
+    if  a==1 && diffAlti(k)<=nivBas %Détection de la sortie d'un tunnel diff(k)<=seuilBas &&
         stepOut = k;
         b=1;
         disp('Sortie tunnel détectée')
-    elseif diff(k)>=seuilHaut && a==2 && diffAlti(k)>=nivHaut %Détection de la sortie d'un pont
+    elseif  a==2 && diffAlti(k)>=nivHaut %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
         stepOut = k;
         b=1;
         disp('Sortie pont détectée')
@@ -52,7 +52,7 @@ for k=1:1:length(diff)
 end
 
 %% Correction d'un tunnel ou d'un pont
-z2=z1;
+z2=z9;
 distance =0;
 distanceAvant=0;
 %Lisser les tunnels
