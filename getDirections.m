@@ -32,6 +32,7 @@ switch status{1}{1}
             e = string({e});
             e = char(e);
             [latitude,longitude] = decodeGooglePolyLine(e,0);
+
         elseif precision ==1
             %Traitement complet de chaque <step>
             lati=[];
@@ -43,11 +44,16 @@ switch status{1}{1}
                 [lat,lon] = decodeGooglePolyLine(e,0);
                 
                 start=length(lati);
-                for i=1:1:length(lat)
+                for i=1:1:length(lat)-1
                     lati(i+start)=lat(i);
                     longi(i+start)=lon(i);
                 end
+                if k == length(res4)-1
+                    lati(length(lati)+1)=lat(length(lat));
+                    longi(length(longi)+1)=lon(length(lon));
+                end
             end
+
             latitude = lati;
             longitude = longi;
         end

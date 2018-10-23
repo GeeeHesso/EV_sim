@@ -31,7 +31,7 @@ while(check==0)
     for k=1:1:length(x)
         dxdl(k) = x(k)/d(k);
         dydl(k) = y(k)/d(k);
-        dzdl(k) = z(k)/d(k);
+        dzdl(k) = 0;%z(k)/d(k);
         vmod (k) = sqrt(dxdl(k)^2 +dydl(k)^2 +dzdl(k)^2)*vlim(k);
     end
     
@@ -39,7 +39,7 @@ while(check==0)
     for k=1:1:length(z)-1
         d2xdl(k) = (x(k+1)-x(k))/(d(k)*d(k+1));
         d2ydl(k) = (y(k+1)-y(k))/(d(k)*d(k+1));
-        d2zdl(k) = (z(k+1)-z(k))/(d(k)*d(k+1));
+        d2zdl(k) = 0;%(z(k+1)-z(k))/(d(k)*d(k+1));
         amod(k) = sqrt(d2xdl(k)^2+d2ydl(k)^2+d2zdl(k)^2)*vlim(k)^2;
     end
     
