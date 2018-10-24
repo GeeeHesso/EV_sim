@@ -61,7 +61,7 @@ while(check==0)
     %Vérification qu'il n'y a pas d'accélération trop forte
     u=0;
     for k=1:1:length(at)
-        if at(k)>10
+        if at(k)>accCentriMax
             u=u+1;
         end
     end
