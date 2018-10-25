@@ -1,5 +1,5 @@
 %function [latitude, longitude, latz, lonz, iti_dist, iti_time] = getItinerary(start,destination,keyAPI)
-function [latitude, longitude] = getDirections(start,destination,keyAPI, precision)
+function [latitude, longitude, latz, lonz, dist, time] = getDirections(start,destination,keyAPI, precision)
 
 %% Création de l'URL
 website = 'https://maps.googleapis.com/maps/api/directions/xml?origin=';
@@ -24,7 +24,59 @@ status = regexp(str, '<status>([^<]*)<\/status>', 'tokens');
 switch status{1}{1}
     case 'OK'
         %Déchiffrement de la réponse de l'API
+        res1 = regexp(str, '<lat>([^<]*)<\/lat>', 'tokens');
+        iti_lat = cellfun(@str2double,res1);
+        res2 = regexp(str, '<lng>([^<]*)<\/lng>', 'tokens');
+        iti_lon = cellfun(@str2double,res2);
+        res3 = regexp(str, '<value>([^<]*)<\/value>', 'tokens');
+        reg = cellfun(@str2double,res3);
+        %Déchiffrement de la réponse de l'API
         res4 = regexp(str, '<points>([^<]*)<\/points>', 'tokens');
+        
+        %Récupération du temps et de la distance
+        a=1;
+        b=1;
+        for k=1:1:length(reg)-1
+            if mod(k,2)~= 0
+                time(a)=reg(k);
+                a = a+1;
+            end
+            if mod(k,2)==0
+                dist(b)=reg(k);
+                b = b+1;
+            end
+        end
+        
+        iti_dist(1)=0;
+        iti_time(1)=0;
+        for k=2:1:length(dist)+1
+            iti_dist(k)=iti_dist(k-1)+dist(k-1);
+            iti_time(k)=iti_time(k-1)+time(k-1);
+        end
+        
+        %Définition lonz et latz
+        q=1;
+        for k=1:1:length(iti_lat)-4
+            if k<=2
+                u=1;
+            end
+            if k>=3
+                u=2;
+            end
+            switch u
+                case 1
+                    latz(q) = iti_lat(k);
+                    lonz(q) = iti_lon(k);
+                    q=q+1;
+                case 2
+                    if mod(k,2)==0
+                        latz(q) =iti_lat(k);
+                        lonz(q) = iti_lon(k);
+                        q=q+1;
+                    end
+            end
+        end
+        
         
         if precision ==0
             %Traitement simplifié <overview_polyline>
@@ -32,7 +84,7 @@ switch status{1}{1}
             e = string({e});
             e = char(e);
             [latitude,longitude] = decodeGooglePolyLine(e,0);
-
+            
         elseif precision ==1
             %Traitement complet de chaque <step>
             lati=[];
@@ -53,7 +105,7 @@ switch status{1}{1}
                     longi(length(longi)+1)=lon(length(lon));
                 end
             end
-
+            
             latitude = lati;
             longitude = longi;
         end

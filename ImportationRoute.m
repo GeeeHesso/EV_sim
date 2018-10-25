@@ -7,9 +7,11 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 %Recherche itinéraire
 disp('Recherche Itinéraire');
 depart = 'Martigny';
-destination = 'Sion, Valais';
-[x1,y1] = getDirections(depart,destination,keyAPI,0);
-[x2,y2] = getDirections(depart,destination,keyAPI,1);
+destination = 'Le Châble, Valais';
+[x1,y1,latz1, lonz1, distance1, time1] = getDirections(depart,destination,keyAPI,0);
+[x2,y2, latz2, lonz2, distance2, time2] = getDirections(depart,destination,keyAPI,1);
+
+[speedLimitSuisse, speedAverage] = getSpeedLimit(distance1, time1);
 
 %Recherche altitude de chaque coordonnée GPS
 disp('Recherche Altitude');
@@ -66,11 +68,11 @@ accCentriMax = 7;%m/s^2
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
 subplot(2,1,1);
-plot(y1_int,x1_int,'b' ,y2_int, x2_int,'r');
+plot(y1_int,x1_int,'b' ,y2_int, x2_int,'r', lonz1,latz1,'x-k');
 title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
-subplot(2,1,1)
+subplot(2,1,2)
 plot(c,z1_int,'b',c,z1Corr_int,'b');
 subplot(2,1,2)
 plot(c2,z2_int,'r',c2,z2Corr_int,'r');
