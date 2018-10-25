@@ -2,6 +2,7 @@ function [dstep, d, dtot, dlat, dlon, dalt, dvdo] = getDistance(lat, lon, alt)
 
 %% Calcul de la distance entre deux coordonnées GPS
 dtot=0;
+d(1)=0;
 for k = 1:1:length(lat)-1
     %Conversion coordonnées GPS de degré à radian
     lat1 = lat(k)*pi/180;
@@ -19,7 +20,6 @@ for k = 1:1:length(lat)-1
     dalt(k)= alt(k+1)-alt(k);%Distance entre 2 altitudes
     
     %Calcul de la distance totale
-    d(1)=0;
     d(k+1) = dtot + dstep(k);%Addition de la distance entre chaque point GPS
     dtot = dtot + dstep(k);%Distance parcourue totale
 end

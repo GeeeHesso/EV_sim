@@ -1,9 +1,9 @@
 %function [latitude, longitude, latz, lonz, iti_dist, iti_time] = getItinerary(start,destination,keyAPI)
-function [latitude, longitude] = getDirections(start,destination,keyAPI)
+function [latitude, longitude] = getDirections(start,destination,keyAPI, precision)
 
 %% Création de l'URL
 website = 'https://maps.googleapis.com/maps/api/directions/xml?origin=';
-url = [website start '&destination=' destination '&key='  keyAPI];
+url = [website start '&destination=' destination '&key='  keyAPI]
 str = webread(url);
 
 
@@ -26,29 +26,37 @@ switch status{1}{1}
         %Déchiffrement de la réponse de l'API
         res4 = regexp(str, '<points>([^<]*)<\/points>', 'tokens');
         
-        %Traitement simplifié <overview_polyline>
-        e = res4(length(res4));
-        e = string({e});
-        e = char(e);
-        [latitude,longitude] = decodeGooglePolyLine(e,0);
-%         
-%         %Traitement complet de chaque <step>
-%         lati=[];
-%         longi=[];
-%         for k=1:1:length(res4)-1
-%             e = res4(k);
-%             e = string({e});
-%             e = char(e);
-%             [lat,lon] = decodeGooglePolyLine(e,0);
-%             
-%             start=length(lati);
-%             for i=1:1:length(lat)
-%                 lati(i+start)=lat(i);
-%                 longi(i+start)=lon(i);
-%             end
-%         end
-%         latitude = lati;
-%         longitude = longi;
+        if precision ==0
+            %Traitement simplifié <overview_polyline>
+            e = res4(length(res4));
+            e = string({e});
+            e = char(e);
+            [latitude,longitude] = decodeGooglePolyLine(e,0);
+
+        elseif precision ==1
+            %Traitement complet de chaque <step>
+            lati=[];
+            longi=[];
+            for k=1:1:length(res4)-1
+                e = res4(k);
+                e = string({e});
+                e = char(e);
+                [lat,lon] = decodeGooglePolyLine(e,0);
+                
+                start=length(lati);
+                for i=1:1:length(lat)-1
+                    lati(i+start)=lat(i);
+                    longi(i+start)=lon(i);
+                end
+                if k == length(res4)-1
+                    lati(length(lati)+1)=lat(length(lat));
+                    longi(length(longi)+1)=lon(length(lon));
+                end
+            end
+
+            latitude = lati;
+            longitude = longi;
+        end
         
     case 'NOT_FOUND'
         error('Google Maps API: NOT FOUND.');
