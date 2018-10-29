@@ -36,7 +36,7 @@ switch status{1}{1}
         %Récupération du temps et de la distance
         a=1;
         b=1;
-        for k=1:1:length(reg)-1
+        for k=1:1:length(reg)-2
             if mod(k,2)~= 0
                 time(a)=reg(k);
                 a = a+1;

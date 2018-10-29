@@ -1,4 +1,4 @@
-clear all;
+%clear all;
 %% Itinéraire, altitude
 
 %Clé API donnée par Google
@@ -7,11 +7,9 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 %Recherche itinéraire
 disp('Recherche Itinéraire');
 depart = 'Martigny';
-destination = 'Le Châble, Valais';
+destination = 'Sion, Valais';
 [x1,y1,latz1, lonz1, distance1, time1] = getDirections(depart,destination,keyAPI,0);
 [x2,y2, latz2, lonz2, distance2, time2] = getDirections(depart,destination,keyAPI,1);
-
-[speedLimitSuisse, speedAverage] = getSpeedLimit(distance1, time1);
 
 %Recherche altitude de chaque coordonnée GPS
 disp('Recherche Altitude');
@@ -46,24 +44,21 @@ disp('Recherche Distance interpolée');
 % 
 % %% Détection d'un tunnel ou d'un pont
 % %Caractéristiques de détection
-disp('Recherche Infrastructure');
- 
-penteMontante=0.2; %différence de pente montante
-penteDescendante=-0.2; %différence de pente descendante
-diffAltiPos = 5;
-diffAltiNeg = -5;
-
-
- [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
- [z2Corr_int, z_2_Corr_int] = getBuilding(z2_int, c_dist2_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
+% disp('Recherche Infrastructure');
+%  
+% penteMontante=0.2; %différence de pente montante
+% penteDescendante=-0.2; %différence de pente descendante
+% diffAltiPos = 5;
+% diffAltiNeg = -5;
+% 
+% [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
+% [z2Corr_int, z_2_Corr_int] = getBuilding(z2_int, c_dist2_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
 
 % %% Vitesse maximum
 disp('Recherche Vitesse max');
-speedLimit = 120/3.6;%m/s
 accCentriMax = 7;%m/s^2
-[vlim, vlim_ref,at]=getMaxSpeed(x_int,y_int,z_int,d_int,speedLimit,accCentriMax);
-[vlim2, vlim_ref2,at2]=getMaxSpeed(x_2_int,y_2_int,z_2_int,d2_int,speedLimit,accCentriMax);
-
+[vlim, at]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz1,lonz1,distance1,time1, accCentriMax);
+[vlim2, at2]=getMaxSpeed(x_2_int,y_2_int,z_2_int,d2_int,c_dist2_int,latz2,lonz2,distance2,time2, accCentriMax);
 
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
