@@ -34,8 +34,8 @@ z2_int=interp1(c_dist2,z2,c2,'pchip');%,'extrap');
 
 % %% Calcul de la distance et de la pente entre deux coordonnées
 disp('Recherche Distance interpolée');
-[d_int,c_dist_int,dist_tot_int, x_int, y_int, z_int, dvdo] = getDistance(x1_int, y1_int, z1_int);
-[d2_int,c_dist2_int,dist2_tot_int, x_2_int, y_2_int, z_2_int, dvdo2] = getDistance(x2_int, y2_int, z2_int);
+[d_int,c_dist_int,dist_tot_int, x_int, y_int, z_int, dvdo, alpha_int] = getDistance(x1_int, y1_int, z1_int);
+[d2_int,c_dist2_int,dist2_tot_int, x_2_int, y_2_int, z_2_int, dvdo2, alpha2_int] = getDistance(x2_int, y2_int, z2_int);
 
 % 
 % %% Caractéristiques de l'itinéraire
@@ -68,9 +68,9 @@ title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
 subplot(2,1,2)
-plot(c,z1_int,'b',c,z1Corr_int,'b');
+plot(c,z1_int,'b');
 subplot(2,1,2)
-plot(c2,z2_int,'r',c2,z2Corr_int,'r');
+plot(c2,z2_int,'r');
 title('Profil de la route');
 xlabel('Distance [m]');
 ylabel('Altitude [m]');
