@@ -46,12 +46,12 @@ disp('Recherche Distance interpolée');
 % %Caractéristiques de détection
 % disp('Recherche Infrastructure');
 %  
-% penteMontante=0.2; %différence de pente montante
-% penteDescendante=-0.2; %différence de pente descendante
-% diffAltiPos = 5;
-% diffAltiNeg = -5;
+penteMontante=0.2; %différence de pente montante
+penteDescendante=-0.2; %différence de pente descendante
+diffAltiPos = 5;
+diffAltiNeg = -5;
 % 
-% [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
+ [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
 % [z2Corr_int, z_2_Corr_int] = getBuilding(z2_int, c_dist2_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
 
 % %% Vitesse maximum
@@ -63,7 +63,8 @@ accCentriMax = 7;%m/s^2
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
 subplot(2,1,1);
-plot(y1_int,x1_int,'b' ,y2_int, x2_int,'r', lonz1,latz1,'x-k');
+plot(c_dist_int(1:1:length(c_dist_int)-1), pente)
+%plot(y1_int,x1_int,'b' ,y2_int, x2_int,'r', lonz1,latz1,'x-k');
 title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
