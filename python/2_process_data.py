@@ -26,9 +26,9 @@ def dist_2_pointsLatLong(lat,lon):
 
 
 
-# data=np.genfromtxt('data.csv',delimiter=',')
+data=np.genfromtxt('data.csv',delimiter=',')
 # data=np.genfromtxt('dataPont1.csv',delimiter=',')
-data=np.genfromtxt('dataPont2.csv',delimiter=',')
+# data=np.genfromtxt('dataPont2.csv',delimiter=',')
 # data=np.genfromtxt('dataTunel1.csv',delimiter=',')
 # data=np.genfromtxt('dataTunel2.csv',delimiter=',')
 
@@ -191,33 +191,33 @@ for t in range(len(l_x1)):
 
 # #####################################################
 # #####################################################
-# plt.plot(data[:,1],data[:,0],'x',color='r')
-# plt.plot(data[:,4],data[:,3],color='b')
-# plt.title("Position")
-# plt.figure()
+plt.plot(data[:,1],data[:,0],'x',color='r')
+plt.plot(data[:,4],data[:,3],color='b')
+plt.title("Position")
+plt.figure()
 
-# plt.plot(distance_1,data[:,2],'x',color='r')
-# plt.plot(distance_2,data[:,5],color='b')
-# plt.title("Height")
+plt.plot(distance_1,data[:,2],'x',color='r')
+plt.plot(distance_2,data[:,5],color='b')
+plt.title("Height")
 
-# plt.figure()
-# plt.plot(distance_1,diff_1)
-# plt.title("Slope")
-# plt.figure()
-# plt.plot(distance_1,diff_2)
-# plt.title("Slope")
+plt.figure()
+plt.plot(distance_1,diff_1)
+plt.title("Slope")
+plt.figure()
+plt.plot(distance_1,diff_2)
+plt.title("Slope")
 
-# plt.figure()
-# plt.plot(d_d1)
-# plt.title("Diff distance")
-# plt.figure()
-# plt.plot(d_d2)
-# plt.title("Diff distance")
+plt.figure()
+plt.plot(d_d1)
+plt.title("Diff distance")
+plt.figure()
+plt.plot(d_d2)
+plt.title("Diff distance")
 
-# plt.figure()
-# plt.plot(inter_y1,inter_x1,'x',color='r')
-# plt.plot(inter_y2,inter_x2,color='b')
-# plt.title("Interpolation")
+plt.figure()
+plt.plot(inter_y1,inter_x1,'x',color='r')
+plt.plot(inter_y2,inter_x2,color='b')
+plt.title("Interpolation")
 
 # plt.figure()
 # plt.plot(dist1_end[]-dist1_end[],inter_z1,'x',color='r') #Need to check the height...
