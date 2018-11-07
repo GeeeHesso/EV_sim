@@ -1,4 +1,4 @@
-function [vlim, vlim_ref,at] = getMaxSpeed(x,y,z,d,speedLimit, accCentriMax)
+function [vlim, at] = getMaxSpeed(x,y,z,d,c_dist,latz, lonz, distance, time, accCentriMax)
 
 %Initialisation des variables
 vlim=[];
@@ -19,10 +19,36 @@ phi=0;
 
 %% Simulation de limitation de vitesse (à remplacer par l'api)
 
-for k=1:1:length(z)+1
-    vlim(k)=speedLimit;
-    vlim_ref(k)=vlim(k);
+c_distance(1)=0;
+for k=1:1:length(distance)
+    c_distance(k+1) = c_distance(k)+distance(k);
 end
+a=1;
+for k=1:1:length(c_dist)
+    speedAverage(a) = distance(a)/time(a);
+    
+    if speedAverage(a) < (30/3.6)
+        vlim(k) = 30/3.6;
+    elseif speedAverage(a) >= (30/3.6) && speedAverage(a)<(50/3.6)
+        vlim(k) = 50/3.6;
+    elseif speedAverage(a) >= (50/3.6) && speedAverage(a)<(80/3.6)
+        vlim(k) = 80/3.6;
+    elseif speedAverage(a) >= (80/3.6)
+        vlim(k) = 120/3.6;
+    end
+    
+    if c_dist(k) >= c_distance(a+1)  
+        if a<length(distance)
+            a=a+1;
+        end
+    end
+    
+end
+
+% for k=1:1:length(z)+1
+%     vlim(k)=speedLimit;
+%     vlim_ref(k)=vlim(k);
+% end
 
 %% Limitation de vitesse due à l'accélération centripète
 
