@@ -51,6 +51,9 @@ def create_profile_real(point,acc_in,acc_out,max_speed,length):
 	return profile
 
 
+
+
+
 length = 1000 #total length of the test
 ratio  = 20   #Ratio for noise
 
