@@ -59,7 +59,7 @@ disp('Recherche Vitesse max');
 accCentriMax = 7;%m/s^2
 [vlim, at]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz1,lonz1,distance1,time1, accCentriMax);
 [vlim2, at2]=getMaxSpeed(x_2_int,y_2_int,z_2_int,d2_int,c_dist2_int,latz2,lonz2,distance2,time2, accCentriMax);
-
+vlim(1)=0.5;
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
 subplot(2,1,1);
@@ -77,6 +77,7 @@ xlabel('Distance [m]');
 ylabel('Altitude [m]');
 figure('Name','Vitesse Maximum','NumberTitle','off');
 subplot(2,1,1)
+vlimX=vlim
 plot(c_dist_int,vlim,'b');
 subplot(2,1,2)
 plot(c_dist2_int,vlim2,'r');
