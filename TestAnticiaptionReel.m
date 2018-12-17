@@ -1,6 +1,5 @@
 
-% position = [0, 1, 2, 3, 4,5,6,7,8,9]
-% vitesse = [5, 5, 3, 5, 5,5,1,5,5,5]
+
 tailleMax = length(c_dist_int);
 acc_in = 2;
 acc_out = 1;
@@ -13,13 +12,10 @@ slope_3=zeros(tailleMax);
 
 for k=1:1:tailleMax
     for i=1:1:k
-
         slope_1_inv(k,i) = sqrt((vlim(k)^2)+2*acc_in*c_dist_int(i));
-        
     end
     slope_1(k,1:k) = flip(slope_1_inv(k,1:k));
 end
-
 
 for k=1:1:tailleMax
     for i=k:1:tailleMax
@@ -32,15 +28,12 @@ slope_2=slope_2';
 
 slope_12 = max(slope_1, slope_2);
 
-%figure(2)
-%plot(c_dist_int, vlim, c_dist_int, slope_12)
-
 vlimX = vlim
- for k=1:1:tailleMax
-     for i=1:1:tailleMax
-         vlim(i) = min(slope_12(i,k), vlim(i));
-     end
- end
- 
- figure(3);
- plot(c_dist_int, vlim, c_dist_int, vlimX)
+for k=1:1:tailleMax
+    for i=1:1:tailleMax
+        vlim(i) = min(slope_12(i,k), vlim(i));
+    end
+end
+
+figure(3);
+plot(c_dist_int, vlim, c_dist_int, vlimX)

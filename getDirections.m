@@ -3,7 +3,7 @@ function [latitude, longitude, latz, lonz, dist, time] = getDirections(start,des
 
 %% Création de l'URL
 website = 'https://maps.googleapis.com/maps/api/directions/xml?origin=';
-url = [website start '&destination=' destination '&key='  keyAPI]
+url = [website start '&destination=' destination '&key='  keyAPI];
 str = webread(url);
 
 

@@ -17,10 +17,6 @@ end
 for k=1:1:length(pente)-2
     deltaPente(k) = pente(k+2)-pente(k);
 end
-disp(max(deltaPente))
-disp(min(deltaPente))
-disp(max(diffAlti))
-disp(min(diffAlti))
 
 for k=1:1:length(deltaPente)
 %     disp(deltaPente(k))

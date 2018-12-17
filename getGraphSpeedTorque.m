@@ -48,7 +48,5 @@ for k=1:1:vitesseMinReg+4
     
 end
 
-
-
 plot(vitesseCouple, seuilCoupleMax, vitesseCouple, seuilCoupleMin )
 grid ON
