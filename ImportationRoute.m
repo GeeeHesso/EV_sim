@@ -8,10 +8,10 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 
 %Départ et arrivée de l'itinéraire
 depart = 'Martigny, Valais';
-destination = 'Bovernier, Valais';
+destination = 'Lausanne, Valais';
 
 %Recherche itinéraire, coordonnées GPS
-[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,0);
+[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,1);
 
 %Recherche altitude de chaque coordonnée GPS
 z1 = getElevation(x1, y1, keyAPI);
@@ -165,7 +165,6 @@ subplot(2,2,[3,4])
 plot(c_dist_int,vlimX*3.6,c_dist_int, vlim*3.6);
 title('Profil de vitesse');
 xlabel('Distance [m]');
-ylabel('Vitesse [m/s]');
-% figure(3)
-% plot(vitesseCouple, seuilCoupleMax, vitesseCouple, seuilCoupleMin)
- 
+ylabel('Vitesse [m/s]'); 
+figure(5)
+plot(vitesseCouple*3.6, seuilCoupleMax/nr/r, vitesseCouple*3.6, seuilCoupleMin/nr/r)
