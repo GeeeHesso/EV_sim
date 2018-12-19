@@ -8,10 +8,10 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 
 %Départ et arrivée de l'itinéraire
 depart = 'Martigny, Valais';
-destination = 'Lausanne, Valais';
+destination = 'Sion, Valais';
 
 %Recherche itinéraire, coordonnées GPS
-[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,1);
+[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,0);
 
 %Recherche altitude de chaque coordonnée GPS
 z1 = getElevation(x1, y1, keyAPI);
@@ -23,7 +23,7 @@ z1 = getElevation(x1, y1, keyAPI);
 c=linspace(0,c_dist(length(c_dist)),c_dist(length(c_dist))/10); %interval 
 x1_int=interp1(c_dist,x1,c,'pchip');
 y1_int=interp1(c_dist,y1,c,'pchip');
-z1_int=interp1(c_dist,z1,c,'spline');
+z1_int=interp1(c_dist,z1,c,'pchip');
 
 % Calcul de la distance et de la pente interpolée
 [d_int,c_dist_int,dist_tot_int, x_int, y_int, z_int, dvdo, alpha_int] = getDistance(x1_int, y1_int, z1_int);
@@ -149,6 +149,11 @@ for k=1:1:vitesseMinReg+4
     
 end
 
+for k=1:1:vitesseMax+1
+    puissanceMax(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMax(k)
+    puissanceMin(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMin(k)
+end
+
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
 subplot(2,2,1);
@@ -157,9 +162,9 @@ title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
 subplot(2,2,2);
-plot(c_dist_int, z1_int, c_dist_int, z1Corr_int)
+plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
 title('Profil de la route');
-xlabel('Distance [m]');
+xlabel('Distance [km]');
 ylabel('Altitude [m]');
 subplot(2,2,[3,4])
 plot(c_dist_int,vlimX*3.6,c_dist_int, vlim*3.6);
@@ -168,3 +173,6 @@ xlabel('Distance [m]');
 ylabel('Vitesse [m/s]'); 
 figure(5)
 plot(vitesseCouple*3.6, seuilCoupleMax/nr/r, vitesseCouple*3.6, seuilCoupleMin/nr/r)
+yyaxis right
+plot(vitesseCouple*3.6, puissanceMax/1000,'b--',  vitesseCouple*3.6, puissanceMin/1000,'r--')
+YAxis(2).Color = 'k';
