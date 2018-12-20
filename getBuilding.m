@@ -18,25 +18,26 @@ for k=1:1:length(pente)-2
     deltaPente(k) = pente(k+2)-pente(k);
 end
 
-for k=1:1:length(deltaPente)
+for k=1:1:length(pente)
 %     disp(deltaPente(k))
 %     disp(diffAlti(k))
     %Détection de l'entrée d'un pont ou d'un tunnel
-    if  a==0 && deltaPente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de l'entrée d'un tunnel diff(k)>=seuilHaut &&
+    if  a==0 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de l'entrée d'un tunnel diff(k)>=seuilHaut &&
         stepIn = max(k-2,0);
         a=1;
         disp('Entrée tunnel détectée')
-    elseif   a==0 && deltaPente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
+    elseif   a==0 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
         stepIn = k;
         a=2;
         disp('Entrée pont détectée')
+        disp(k)
     end
     %Détection de la sortie d'un pont ou d'un tunnel
-    if  a==1 && deltaPente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de la sortie d'un tunnel diff(k)<=seuilBas &&
-        stepOut = min(k+7,length(deltaPente)-1);
+    if  a==1 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de la sortie d'un tunnel diff(k)<=seuilBas &&
+        stepOut = min(k+7,length(pente)-1);
         b=1;
         disp('Sortie tunnel détectée')
-    elseif  a==2 && deltaPente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
+    elseif  a==2 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
         stepOut = k;
         b=1;
         disp('Sortie pont détectée')
@@ -44,8 +45,8 @@ for k=1:1:length(deltaPente)
     
     %Sauvegarde de l'entrée et de la sortie du tunnel
     if a==1 && b==1 || a==2 && b==1
-        tunnel_start(c) = stepIn;
-        tunnel_stop(c) = stepOut+20;
+        tunnel_start(c) = stepIn-10;
+        tunnel_stop(c) = stepOut+15;
         stepIn=0;
         stepOut=0;
         a=0;
@@ -70,10 +71,10 @@ if isTunnel==true
     for k=1:1:length(tunnel_start)
         hauteur = z1Corr_int(tunnel_stop(k))-z1Corr_int(tunnel_start(k));
         longeur = c_dist_int(tunnel_stop(k))-c_dist_int(tunnel_start(k));
-        pente = hauteur / longeur;
+        pente(k) = hauteur / longeur;
         
         for i=tunnel_start(k):1:tunnel_stop(k)-1
-            z1Corr_int(i)= pente*(c_dist_int(i)-c_dist_int(tunnel_start(k)))+z1Corr_int(tunnel_start(k));
+            z1Corr_int(i)= pente(k)*(c_dist_int(i)-c_dist_int(tunnel_start(k)))+z1Corr_int(tunnel_start(k));
         end
     end
 end

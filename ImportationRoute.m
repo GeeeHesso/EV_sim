@@ -1,5 +1,5 @@
 clear all;
-
+close all;
 %% Importation de l'itinéraire depuis Google
 disp('Recherche Itinéraire');
 
@@ -8,10 +8,10 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 
 %Départ et arrivée de l'itinéraire
 depart = 'Martigny, Valais';
-destination = 'Sion, Valais';
+destination = 'Bovernier, Valais';
 
 %Recherche itinéraire, coordonnées GPS
-[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,0);
+[x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,1);
 
 %Recherche altitude de chaque coordonnée GPS
 z1 = getElevation(x1, y1, keyAPI);
@@ -20,7 +20,7 @@ z1 = getElevation(x1, y1, keyAPI);
 [d,c_dist,dist_tot, x, y, z] = getDistance(x1, y1, z1);
 
 % Interpolation à interval régulier
-c=linspace(0,c_dist(length(c_dist)),c_dist(length(c_dist))/10); %interval 
+c=linspace(0,c_dist(length(c_dist)),c_dist(length(c_dist))/10); %interval
 x1_int=interp1(c_dist,x1,c,'pchip');
 y1_int=interp1(c_dist,y1,c,'pchip');
 z1_int=interp1(c_dist,z1,c,'pchip');
@@ -35,10 +35,10 @@ z1_int=interp1(c_dist,z1,c,'pchip');
 disp('Détection Tunnel');
 
 %Caractéristiques de détection
-penteMontante=0.2; 
-penteDescendante=-0.2; 
-diffAltiPos = 0.2;
-diffAltiNeg = -0.2;
+penteMontante=0.4;
+penteDescendante=-1;
+diffAltiPos = 0;
+diffAltiNeg = 0;
 
 [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
 
@@ -55,44 +55,7 @@ disp('Anticipation des virages');
 acc_in = 2;
 acc_out = 1;
 
-% longueur maximum
-tailleMax = length(c_dist_int);
-
-% Création des matrices vides
-slope_1_inv=zeros(tailleMax);
-slope_1 = zeros(tailleMax);
-slope_2=zeros(tailleMax);
-slope_3=zeros(tailleMax);
-
-% Création du freinage maximum de chaque point
-for k=1:1:tailleMax
-    for i=1:1:k
-        slope_1_inv(k,i) = sqrt((vlim(k)^2)+2*acc_in*c_dist_int(i));
-    end
-    slope_1(k,1:k) = flip(slope_1_inv(k,1:k));
-end
-
-% Création de l'accélération maximum de chaque point
-for k=1:1:tailleMax
-    for i=k:1:tailleMax
-        slope_2(k,i) = sqrt((vlim(k)^2)+2*acc_out*(c_dist_int(i)-c_dist_int(k)));
-    end
-end
-
-% Transposition matrice pour les graphes
-slope_1=slope_1';
-slope_2=slope_2';
-
-% Le maximum des courbes
-slope_12 = max(slope_1, slope_2);
-
-% Génération du profil complet
-vlimX = vlim;
-for k=1:1:tailleMax
-    for i=1:1:tailleMax
-        vlim(i) = min(slope_12(i,k), vlim(i));
-    end
-end
+[vlim, vlimX] = getAnticipation(c_dist_int,vlim, acc_in, acc_out);
 
 
 %% Limites moteur
@@ -121,7 +84,6 @@ vitesseDecroMS_Min = puissanceMinRoues / coupleMinRoues * rr;
 vitesseCouple = 0:1:vitesseMax;
 
 for k=1:1:vitesseMax+1
-    
     if vitesseCouple(k) <= vitesseDecroMS_Max
         seuilCoupleMax(k) = coupleMaxRoues;
     elseif vitesseCouple(k) >= vitesseDecroMS_Max
@@ -136,10 +98,10 @@ for k=1:1:vitesseMax+1
         seuilCoupleMin(k)= puissanceMinRoues / (vitesseCouple(k)/rr);
     end
 end
- 
+
 i = 2;
 for k=1:1:vitesseMinReg+4
-   
+    
     if vitesseCouple(k) <= vitesseMinReg
         seuilCoupleMin(k)=0;
     elseif vitesseCouple(k) > vitesseMinReg
@@ -150,27 +112,30 @@ for k=1:1:vitesseMinReg+4
 end
 
 for k=1:1:vitesseMax+1
-    puissanceMax(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMax(k)
-    puissanceMin(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMin(k)
+    puissanceMax(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMax(k);
+    puissanceMin(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMin(k);
 end
 
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
 subplot(2,2,1);
-plot(y1_int, x1_int)
+plot(c_dist_int(1:1:length(c_dist_int)-1), pente)
+%plot(y1_int, x1_int)
 title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
 subplot(2,2,2);
-plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
+plot( c_dist_int(1:1:length(c_dist_int)-1), zCorr_int)
+%plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
 title('Profil de la route');
 xlabel('Distance [km]');
 ylabel('Altitude [m]');
 subplot(2,2,[3,4])
+%plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
 plot(c_dist_int,vlimX*3.6,c_dist_int, vlim*3.6);
 title('Profil de vitesse');
 xlabel('Distance [m]');
-ylabel('Vitesse [m/s]'); 
+ylabel('Vitesse [m/s]');
 figure(5)
 plot(vitesseCouple*3.6, seuilCoupleMax/nr/r, vitesseCouple*3.6, seuilCoupleMin/nr/r)
 yyaxis right
