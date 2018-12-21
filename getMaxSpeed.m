@@ -1,4 +1,4 @@
-function [vlim, at] = getMaxSpeed(x,y,z,d,c_dist,latz, lonz, distance, time, accCentriMax)
+function [vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl, phi] = getMaxSpeed(x,y,z,d,c_dist,latz, lonz, distance, time, accCentriMax)
 
 %Initialisation des variables
 vlim=[];
@@ -51,7 +51,7 @@ end
 % end
 
 %% Limitation de vitesse due à l'accélération centripète
-
+ww=1
 while(check==0)
     % Vecteur Vitesse
     for k=1:1:length(x)
@@ -75,6 +75,12 @@ while(check==0)
         phi(k) = acos(av(k)/(vmod(k)*amod(k)));
         at(k) = sin(phi(k))*amod(k);
     end
+    
+    if ww ==1 
+        atWW = at
+        ww=0;
+    end
+    
     %Diminution de la vitesse max en fonction de l'accélération centripète
     for k=1:1:length(at)
         if at(k) > accCentriMax && at(k) < 15

@@ -8,7 +8,7 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 
 %Départ et arrivée de l'itinéraire
 depart = 'Martigny, Valais';
-destination = 'Bovernier, Valais';
+destination = 'Sion, Valais';
 
 %Recherche itinéraire, coordonnées GPS
 [x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,1);
@@ -45,7 +45,7 @@ diffAltiNeg = 0;
 %% Limitation vitesse
 disp('Limitation de vitesse estimée');
 accCentriMax = 6;%m/s^2
-[vlim, at]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz,lonz,distance,time, accCentriMax);
+[vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl, phi]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz,lonz,distance,time, accCentriMax);
 vlim(1)=0.5; %nécessaire pour la génération du profil de vitesse
 
 %% Anticipation, accélération maximum
