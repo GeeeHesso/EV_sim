@@ -46,7 +46,7 @@ for k=1:1:length(pente)
     %Sauvegarde de l'entrée et de la sortie du tunnel
     if a==1 && b==1 || a==2 && b==1
         tunnel_start(c) = stepIn-10;
-        tunnel_stop(c) = stepOut+15;
+        tunnel_stop(c) = stepOut+10;
         stepIn=0;
         stepOut=0;
         a=0;

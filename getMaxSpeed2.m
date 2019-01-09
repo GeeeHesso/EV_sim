@@ -1,4 +1,4 @@
-function [vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl,dzdl,d2zdl, phi] = getMaxSpeed(x,y,z,d,c_dist,latz, lonz, distance, time, accCentriMax)
+function [vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl,dzdl,d2zdl,phi] = getMaxSpeed(x,y,z,d,c_dist,latz, lonz, distance, time, accCentriMax)
 
 %Initialisation des variables
 vlim=[];
@@ -37,7 +37,7 @@ for k=1:1:length(c_dist)
         vlim(k) = 120/3.6;
     end
     
-    if c_dist(k) >= c_distance(a+1)  
+    if c_dist(k) >= c_distance(a+1)
         if a<length(distance)
             a=a+1;
         end
@@ -55,20 +55,32 @@ ww=1
 while(check==0)
     % Vecteur Vitesse
     for k=1:1:length(x)
-        dxdl(k) = x(k)/d(k);
-        dydl(k) = y(k)/d(k);
-        dzdl(k) = z(k)/d(k);
+        dxdl_x(k) = x(k)/d(k);
+        dydl_x(k) = y(k)/d(k);
+        dzdl_x(k) = z(k)/d(k);
+    end
+    
+    dxdl = interp1(c_dist,dxdl_x,'spline');
+    dydl = interp1(c_dist,dydl_x,'spline');
+    dzdl = interp1(c_dist,dzdl_x,'spline');
+    
+    for k=1:1:length(x)
         vmod (k) = sqrt(dxdl(k)^2 +dydl(k)^2 +dzdl(k)^2)*vlim(k);
     end
     
+    
     % Vecteur Accélération
-    for k=1:1:length(x)-1
+    for k=1:1:length(z)-1
         d2xdl(k) = (x(k+1)-x(k))/(d(k)*d(k+1));
         d2ydl(k) = (y(k+1)-y(k))/(d(k)*d(k+1));
         d2zdl(k) = (z(k+1)-z(k))/(d(k)*d(k+1));
         amod(k) = sqrt(d2xdl(k)^2+d2ydl(k)^2+d2zdl(k)^2)*vlim(k)^2;
     end
+
     
+    for k=1:1:length(z)-1
+       
+    end
     %Angle entre le vecteur vitesse et le vecteur accélération
     for k=1:1:length(d2xdl)
         av(k) = (d2xdl(k)*dxdl(k)+d2ydl(k)*dydl(k)+d2zdl(k)*dzdl(k))*vlim(k)^3;
@@ -76,8 +88,8 @@ while(check==0)
         at(k) = sin(phi(k))*amod(k);
     end
     
-    if ww ==1 
-        atWW = at;
+    if ww ==1
+        atWW = at
         ww=0;
     end
     

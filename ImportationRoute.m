@@ -8,7 +8,7 @@ keyAPI = 'AIzaSyC5RUqHWJvBOwrV4rUXYKyNBrzII5Lhc3E';
 
 %Départ et arrivée de l'itinéraire
 depart = 'Martigny, Valais';
-destination = 'Sion, Valais';
+destination = 'Bovernier, Valais';
 
 %Recherche itinéraire, coordonnées GPS
 [x1,y1,latz, lonz, distance, time] = getDirections(depart,destination,keyAPI,1);
@@ -20,32 +20,57 @@ z1 = getElevation(x1, y1, keyAPI);
 [d,c_dist,dist_tot, x, y, z] = getDistance(x1, y1, z1);
 
 % Interpolation à interval régulier
-c=linspace(0,c_dist(length(c_dist)),c_dist(length(c_dist))/10); %interval
-x1_int=interp1(c_dist,x1,c,'pchip');
-y1_int=interp1(c_dist,y1,c,'pchip');
-z1_int=interp1(c_dist,z1,c,'pchip');
+c=linspace(0,c_dist(length(c_dist)),c_dist(length(c_dist))/5); %interval
+
+x1_int=interp1(c_dist,x1,c);
+y1_int=interp1(c_dist,y1,c);
+z1_int=interp1(c_dist,z1,c);
+
+
+%Filtrage des données X,Y
+size_window=7; %Must be odd
+window=1/size_window*ones(1,size_window);
+x1_filter=conv(x1_int,window,"same");
+y1_filter=conv(y1_int,window,"same");
+
+%Correction des premiers/derniers points
+x1_filter(1:(size_window-1)/2)=x1_int(1:(size_window-1)/2);
+x1_filter(end-(size_window-1)/2:end)=x1_int(end-(size_window-1)/2:end);
+
+y1_filter(1:(size_window-1)/2)=y1_int(1:(size_window-1)/2);
+y1_filter(end-(size_window-1)/2:end)=y1_int(end-(size_window-1)/2:end);
+
+%Filtrage des données Z
+size_window=51; %Must be odd
+window=1/size_window*ones(1,size_window);
+z1_filter=conv(z1_int,window,"same");
+
+z1_filter(1:(size_window-1)/2)=z1_int(1:(size_window-1)/2);
+z1_filter(end-(size_window-1)/2:end)=z1_int(end-(size_window-1)/2:end);
 
 % Calcul de la distance et de la pente interpolée
-[d_int,c_dist_int,dist_tot_int, x_int, y_int, z_int, dvdo, alpha_int] = getDistance(x1_int, y1_int, z1_int);
+[d_int,c_dist_int,dist_tot_int, x_int, y_int, z_int, dvdo, alpha_int] = getDistance(x1_filter, y1_filter, z1_filter);
 
 % Caractéristiques de l'itinéraire (dénivelé, poit culminant, ..)
-[dp, dn, denTot, plpb, pc]=getCharacteristics(z1_int);
+[dp, dn, denTot, plpb, pc]=getCharacteristics(z1_filter);
 
 %% Détection d'un tunnel ou d'un pont
 disp('Détection Tunnel');
 
 %Caractéristiques de détection
-penteMontante=0.4;
-penteDescendante=-1;
+penteMontante=0.2;
+penteDescendante=-0.2;
 diffAltiPos = 0;
 diffAltiNeg = 0;
 
-[z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
+[z1Corr_int, zCorr_int, pente] = getBuilding(z1_filter, c_dist_int, penteMontante, penteDescendante, diffAltiPos, diffAltiNeg);
+
+%pente2 = interp1(c_dist_int,pente,'pchip');
 
 %% Limitation vitesse
 disp('Limitation de vitesse estimée');
 accCentriMax = 6;%m/s^2
-[vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl, phi]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz,lonz,distance,time, accCentriMax);
+[vlim, at, atWW, dxdl,d2xdl,dydl,d2ydl,dzdl,d2zdl,phi]=getMaxSpeed(x_int,y_int,z_int,d_int,c_dist_int,latz,lonz,distance,time, accCentriMax);
 vlim(1)=0.5; %nécessaire pour la génération du profil de vitesse
 
 %% Anticipation, accélération maximum
@@ -116,28 +141,28 @@ for k=1:1:vitesseMax+1
     puissanceMin(k) = (vitesseCouple(k)/rr/nr)*seuilCoupleMin(k);
 end
 
+
 %% OUTPUT
 figure('Name','Caractéristiques de la route','NumberTitle','off');
-subplot(2,2,1);
+subplot(3,1,1);
+%plot(y1,x1,y1_int, x1_int,y1_filter,x1_filter)
 plot(c_dist_int(1:1:length(c_dist_int)-1), pente)
-%plot(y1_int, x1_int)
 title('Plan de la route');
 xlabel('Longitude [-]');
 ylabel('Latitude [-]');
-subplot(2,2,2);
-plot( c_dist_int(1:1:length(c_dist_int)-1), zCorr_int)
-%plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
+subplot(3,1,2);
+plot(c_dist/1000, z1, c_dist_int/1000, z1_int, c_dist_int/1000, z1_filter,c_dist_int/1000,z1Corr_int)
 title('Profil de la route');
 xlabel('Distance [km]');
 ylabel('Altitude [m]');
-subplot(2,2,[3,4])
+subplot(3,1,3)
 %plot(c_dist_int/1000, z1_int, c_dist_int/1000, z1Corr_int)
 plot(c_dist_int,vlimX*3.6,c_dist_int, vlim*3.6);
 title('Profil de vitesse');
 xlabel('Distance [m]');
 ylabel('Vitesse [m/s]');
-figure(5)
-plot(vitesseCouple*3.6, seuilCoupleMax/nr/r, vitesseCouple*3.6, seuilCoupleMin/nr/r)
-yyaxis right
-plot(vitesseCouple*3.6, puissanceMax/1000,'b--',  vitesseCouple*3.6, puissanceMin/1000,'r--')
-YAxis(2).Color = 'k';
+% figure(5)
+% plot(vitesseCouple*3.6, seuilCoupleMax/nr/r, vitesseCouple*3.6, seuilCoupleMin/nr/r)
+% yyaxis right
+% plot(vitesseCouple*3.6, puissanceMax/1000,'b--',  vitesseCouple*3.6, puissanceMin/1000,'r--')
+% YAxis(2).Color = 'k';
