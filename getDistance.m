@@ -1,4 +1,4 @@
-function [dstep, d, dtot, dlat, dlon, dalt, dvdo, alpha] = getDistance(lat, lon, alt)
+function [dstep, d, dtot, dlat, dlon, dalt, dvdo, alpha, pente] = getDistance(lat, lon, alt)
 
 %% Calcul de la distance entre deux coordonnées GPS
 dtot=0;
@@ -19,13 +19,16 @@ for k = 1:1:length(lat)-1
     dlon(k)= real(6371008*acos(cos(lat1)*cos(lat1)*cos(lon2-lon1)+sin(lat1)*sin(lat1)));%distance entre 2 longitudes
     dalt(k)= alt(k+1)-alt(k);%Distance entre 2 altitudes
     
+    dl(k) = sqrt(dstep(k)^2+dalt(k)^2);
+    
     %Calcul de la distance totale
-    d(k+1) = dtot + dstep(k);%Addition de la distance entre chaque point GPS
-    dtot = dtot + dstep(k);%Distance parcourue totale
+    d(k+1) = dtot + dl(k);%Addition de la distance entre chaque point GPS
+    dtot = dtot + dl(k);%Distance parcourue totale
 end
 
 for k=1:1:length(dstep)
     alpha(k) = atan(dalt(k)/dstep(k));
+    pente(k) = dalt(k)/dstep(k);
 end
 
 %% Distance à vol d'oiseau

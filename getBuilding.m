@@ -1,4 +1,4 @@
-function [z1Corr_int, zCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante,diffAltiPos, diffAltiNeg)
+function [z1Corr_int, zCorr_int, alphaCorr_int, pente] = getBuilding(z1_int, c_dist_int, penteMontante, penteDescendante,diffAltiPos, diffAltiNeg)
 
 a=0;
 b=0;
@@ -14,39 +14,42 @@ for k=1:1:length(z1_int)-1
     diffAlti(k)= z1_int(k+1)-z1_int(k);
 end
 
-for k=1:1:length(pente)-2
-    deltaPente(k) = pente(k+2)-pente(k);
-end
-
 for k=1:1:length(pente)
-%     disp(deltaPente(k))
-%     disp(diffAlti(k))
+    %     disp(deltaPente(k))
+    %     disp(diffAlti(k))
     %Détection de l'entrée d'un pont ou d'un tunnel
     if  a==0 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de l'entrée d'un tunnel diff(k)>=seuilHaut &&
-        stepIn = max(k-2,0);
+        %         stepIn = max(k-2,0);
+        stepIn = max(k,0);
         a=1;
         disp('Entrée tunnel détectée')
-    elseif   a==0 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
-        stepIn = k;
-        a=2;
-        disp('Entrée pont détectée')
+        disp(c_dist_int(k))
         disp(k)
+        %     elseif   a==0 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
+        %         stepIn = k;
+        %         a=2;
+        %         disp('Entrée pont détectée')
+        %         disp(c_dist_int(k))
     end
     %Détection de la sortie d'un pont ou d'un tunnel
     if  a==1 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de la sortie d'un tunnel diff(k)<=seuilBas &&
-        stepOut = min(k+7,length(pente)-1);
+        %         stepOut = min(k+7,length(pente)-1);
+        stepOut = min(k,length(pente));
         b=1;
         disp('Sortie tunnel détectée')
-    elseif  a==2 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
-        stepOut = k;
-        b=1;
-        disp('Sortie pont détectée')
+        disp(c_dist_int(k))
+        disp(k)
+        %     elseif  a==2 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
+        %         stepOut = k;
+        %         b=1;
+        %         disp('Sortie pont détectée')
+        %         disp(c_dist_int(k))
     end
     
     %Sauvegarde de l'entrée et de la sortie du tunnel
     if a==1 && b==1 || a==2 && b==1
         tunnel_start(c) = stepIn-10;
-        tunnel_stop(c) = stepOut+10;
+        tunnel_stop(c) = stepOut+35;
         stepIn=0;
         stepOut=0;
         a=0;
@@ -78,8 +81,9 @@ if isTunnel==true
         end
     end
 end
-% Différence de hauteur corrigée (z)
 for k=1:1:length(z1Corr_int)-1
-    zCorr_int(k) = z1Corr_int(k+1)-z1Corr_int(k);
+    pente(k) = (z1Corr_int(k+1)-z1Corr_int(k))/(c_dist_int(k+1)-c_dist_int(k));
+    alphaCorr_int(k) = atan(pente(k));
+    zCorr_int(k)= z1Corr_int(k+1)-z1Corr_int(k);
 end
-end
+alphaCorr_int(1)=0;
