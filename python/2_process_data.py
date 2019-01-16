@@ -26,11 +26,11 @@ def dist_2_pointsLatLong(lat,lon):
 
 
 
-data=np.genfromtxt('data.csv',delimiter=',')
+# data=np.genfromtxt('data.csv',delimiter=',')
 # data=np.genfromtxt('dataPont1.csv',delimiter=',')
 # data=np.genfromtxt('dataPont2.csv',delimiter=',')
 # data=np.genfromtxt('dataTunel1.csv',delimiter=',')
-# data=np.genfromtxt('dataTunel2.csv',delimiter=',')
+data=np.genfromtxt('dataTunel2.csv',delimiter=',')
 
 distance_1=[0]
 distance_2=[0]
