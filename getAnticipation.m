@@ -1,5 +1,10 @@
 function [vlim, vlimX] = getAnticipation(c_dist_int,vlim, acc_in, acc_out)
 
+%%TO DO
+%Il est nécessaire de modifier le code pour pouvoir importer des
+%itinéraires long. Car la fonction zeros de la ligne 13 a une limite de de
+%taille
+%%
 % longueur maximum
 tailleMax = length(c_dist_int);
 
@@ -38,4 +43,4 @@ for k=1:1:tailleMax
         vlim(i) = min(slope_12(i,k), vlim(i));
     end
 end
-end
+

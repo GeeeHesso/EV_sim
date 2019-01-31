@@ -1,0 +1,8 @@
+{
+  "name": "Isalad",
+  "app_id": "b9023f8b",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

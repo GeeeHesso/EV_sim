@@ -25,11 +25,11 @@ for k=1:1:length(pente)
         disp('Entrée tunnel détectée')
         disp(c_dist_int(k))
         disp(k)
-        %     elseif   a==0 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
-        %         stepIn = k;
-        %         a=2;
-        %         disp('Entrée pont détectée')
-        %         disp(c_dist_int(k))
+    elseif   a==0 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de l'entrée d'un pont diff(k)<=seuilBas &&
+        stepIn = k;
+        a=2;
+        disp('Entrée pont détectée')
+        disp(c_dist_int(k))
     end
     %Détection de la sortie d'un pont ou d'un tunnel
     if  a==1 && pente(k)<=penteDescendante && diffAlti(k) <= diffAltiNeg %Détection de la sortie d'un tunnel diff(k)<=seuilBas &&
@@ -39,17 +39,17 @@ for k=1:1:length(pente)
         disp('Sortie tunnel détectée')
         disp(c_dist_int(k))
         disp(k)
-        %     elseif  a==2 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
-        %         stepOut = k;
-        %         b=1;
-        %         disp('Sortie pont détectée')
-        %         disp(c_dist_int(k))
+    elseif  a==2 && pente(k)>=penteMontante && diffAlti(k) >=diffAltiPos %Détection de la sortie d'un pont diff(k)>=seuilHaut &&
+        stepOut = k;
+        b=1;
+        disp('Sortie pont détectée')
+        disp(c_dist_int(k))
     end
     
     %Sauvegarde de l'entrée et de la sortie du tunnel
     if a==1 && b==1 || a==2 && b==1
         tunnel_start(c) = stepIn-10;
-        tunnel_stop(c) = stepOut+35;
+        tunnel_stop(c) = stepOut+40;
         stepIn=0;
         stepOut=0;
         a=0;

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+ 
+    <ion-title>
+      ISalad
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+
+
+ <ion-item>
+
+<div class="progress-container">
+  Humidité de la terre
+<div class="progress-wrapper">
+
+
+
+  <div class="current" [ngStyle]="getOverlayStyle()">{{myPerson.moisture}}</div>
+
+<round-progress [color]="'#4ddf1a'"   [background]="'#b4e4a3'" [current]="myPerson.moisture" 
+[max]="maxHumidity" [responsive]="true" [radius]="125" [stroke]="12"  [duration]="1500" [animation]="'easeInOutBack'" ></round-progress>
+
+</div>
+    </div>
+    <!--
+    <div *ngIf="myPerson.luminosity<=500"> 
+    {{nightToast()}}
+
+    </div> -->
+
+
+</ion-item>
+
+
+
+
+</ion-content>

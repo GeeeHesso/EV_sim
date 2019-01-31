@@ -1,0 +1,90 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+ 
+    <ion-title>
+      Paramètres
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<ion-item>
+<p> Avant toutes choses : désactivez la régulation
+</ion-item>
+
+
+<ion-list>
+
+<ion-item>
+   <ion-label>Régulation   </ion-label>
+   
+     <ion-label> 
+       <div *ngIf="myPerson.Regulation==1" class="flower_pot">     
+         <ion-label><img class="pot" src="assets/switch_on.png"  (click)="switchRegulation()"/></ion-label>
+        </div> 
+
+      <div *ngIf="myPerson.Regulation==0" class="flower_pot">         
+        <ion-label>    <img class="pot" src="assets/switch_off.png" (click)="switchRegulation()"/> </ion-label>
+      </div>
+    </ion-label>
+</ion-item>
+
+
+<ion-item>
+   <ion-label>Lumières   </ion-label>
+   
+     <ion-label> 
+       <div *ngIf="myPerson.relay==1" class="flower_pot">     
+         <ion-label><img class="pot" src="assets/switch_on.png"  (click)="switchRelayLight()"/></ion-label>
+        </div> 
+
+      <div *ngIf="myPerson.relay==0" class="flower_pot">         
+        <ion-label>    <img class="pot" src="assets/switch_off.png" (click)="switchRelayLight()"/> </ion-label>
+      </div>
+    </ion-label>
+</ion-item>
+
+<ion-item>
+   <ion-label>Pompes   </ion-label>
+   
+     <ion-label> 
+       <div *ngIf="myPerson.relay2==1" class="flower_pot">     
+         <ion-label><img class="pot" src="assets/switch_on.png"  (click)="switchRelayPump()"/></ion-label>
+        </div> 
+
+      <div *ngIf="myPerson.relay2==0" class="flower_pot">         
+        <ion-label>    <img class="pot" src="assets/switch_off.png" (click)="switchRelayPump()"/> </ion-label>
+      </div>
+    </ion-label>
+</ion-item>
+
+<ion-item>
+   <ion-label>Ventilateur   </ion-label>
+   
+     <ion-label> 
+       <div *ngIf="myPerson.relay3==1" class="flower_pot">     
+         <ion-label><img class="pot" src="assets/switch_on.png"  (click)="switchRelayVentilo()"/></ion-label>
+        </div> 
+
+      <div *ngIf="myPerson.relay3==0" class="flower_pot">         
+        <ion-label>    <img class="pot" src="assets/switch_off.png" (click)="switchRelayVentilo()"/> </ion-label>
+      </div>
+    </ion-label>
+</ion-item>
+
+
+</ion-list>
+
+</ion-content>

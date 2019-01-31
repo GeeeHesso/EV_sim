@@ -1,0 +1,48 @@
+<!--
+  Generated template for the LuminosityPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+ 
+    <ion-title>
+      ISalad
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+ <ion-item>
+
+<div class="progress-container">
+Luminosité
+  <div class="progress-wrapper">
+
+
+
+  <div class="current" [ngStyle]="getOverlayStyle()">{{myPerson.luminosity}}</div>
+
+<round-progress [color]="'#4ddf1a'"   [background]="'#b4e4a3'" [current]="myPerson.luminosity" 
+[max]="maxHumidity" [responsive]="true" [radius]="125" [stroke]="12"  [duration]="1500" [animation]="'easeInOutBack'" ></round-progress>
+
+</div>
+    </div>
+    <!--
+    <div *ngIf="myPerson.luminosity<=500"> 
+    {{nightToast()}}
+
+    </div> -->
+
+
+
+</ion-item>
+
+
+
+</ion-content>

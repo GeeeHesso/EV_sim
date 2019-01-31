@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-navbar>
+      <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+ 
+    <ion-title>
+      ISalad
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="home" padding>
+
+
+<h2>Votre jardin</h2>
+ <ion-item>
+
+    
+
+    <div *ngIf="myPerson.water==1"> 
+    <p>Le bac est vide, veuillez le remplir.</p>
+    </div>
+        <div *ngIf="myPerson.water==0" > 
+    <p>Il reste suffisamment d'eau.</p>
+
+
+    </div>
+
+
+</ion-item>
+<ion-item>
+  <ion-label>Date de semis</ion-label>
+  <ion-label>{{myPerson.date}}</ion-label>
+
+</ion-item>
+
+<ion-grid>
+
+  <ion-row>
+    <ion-col>
+   
+      <div class="flower_pot"> 
+         {{myPerson.nameFlower1}}
+             <img class="pot" src="assets/img/flower_pot.png"/>
+           <img class="flower"   src="{{'assets/img/1/' + myPerson.slot1 + '.png'}}"/>
+  
+      </div>
+    </ion-col>
+    <ion-col>
+    
+         <div class="flower_pot"> 
+     {{myPerson.nameFlower2}}
+      <img src="assets/img/flower_pot.png"/>
+           <img class="flower"   src="{{'assets/img/1/' + myPerson.slot2 + '.png'}}"/>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+  <ion-col>
+
+      <div class="flower_pot"> 
+    {{myPerson.nameFlower3}}
+    <img src="assets/img/flower_pot.png"/>
+           <img class="flower"   src="{{'assets/img/1/' + myPerson.slot3 + '.png'}}"/>
+    </div>
+  </ion-col>
+  <ion-col>
+
+      <div class="flower_pot"> 
+      {{myPerson.nameFlower4}}
+ 
+    <img src="assets/img/flower_pot.png"/>
+           <img class="flower"   src="{{'assets/img/1/' + myPerson.slot4 + '.png'}}"/>
+    </div>
+  </ion-col>
+</ion-row>
+</ion-grid>
+
+  <button ion-button color="light" (click)="showModify()">Modifier</button>
+
+<div *ngIf="showmodify==1">
+
+ 
+<ion-grid> 
+<ion-list>
+  <ion-item>
+ <ion-label>Changer la date de semis</ion-label>
+  <ion-datetime displayFormat="DD/MM/YYYY"   (ionChange)="changeDate(UserTime)" [(ngModel)]="UserTime" ></ion-datetime>
+ </ion-item>
+ 
+  <ion-row>
+    <ion-col>
+ <div >
+
+    <ion-label>Modifier le pot 1</ion-label>
+ 
+      <ion-select [(ngModel)]="value1" (ionChange)="updateFlower1(value1)" multiple="false" cancelText="Annuler" okText="Valider"><ion-option value="1">Basilic</ion-option>
+      <ion-option value="2">Persil</ion-option>
+      <ion-option value="3">Ciboulette</ion-option>
+      <ion-option value="4">Cerfeuille</ion-option>
+      </ion-select>
+
+
+
+  </div>
+    </ion-col>
+
+  <ion-col>
+<div>
+
+    <ion-label>Modifier le pot 2</ion-label>
+    <ion-select [(ngModel)]="value2" (ionChange)="updateFlower2(value2)" multiple="false" cancelText="Annuler" okText="Valider">  <ion-option value="1" >Basilic</ion-option>
+      <ion-option value="2">Persil</ion-option>
+      <ion-option value="3">Ciboulette</ion-option>
+      <ion-option value="4">Cerfeuille</ion-option>
+    </ion-select>
+ 
+  </div>
+  </ion-col>
+  </ion-row>
+
+
+  <ion-row>
+  <ion-col>
+   <div>
+  
+    <ion-label>Modifier le pot 3</ion-label>
+    <ion-select [(ngModel)]="value3" (ionChange)="updateFlower3(value3)" multiple="false" cancelText="Annuler" okText="Valider"> <ion-option value="1" >Basilic</ion-option>
+      <ion-option value="2">Persil</ion-option>
+      <ion-option value="3" >Ciboulette</ion-option>
+      <ion-option value="4">Cerfeuille</ion-option>
+    </ion-select>
+
+    </div>
+  </ion-col>
+
+<ion-col>
+ <div>
+
+    <ion-label>Modifier le pot 4</ion-label>
+    <ion-select [(ngModel)]="value4" (ionChange)="updateFlower4(value4)" multiple="false" cancelText="Annuler" okText="Valider">
+      <ion-option value="1" >Basilic</ion-option>
+      <ion-option value="2">Persil</ion-option>
+      <ion-option value="3">Ciboulette</ion-option>
+      <ion-option value="4" >Cerfeuille</ion-option>
+    </ion-select>
+
+    </div>
+  </ion-col>
+  </ion-row>
+  </ion-list>
+
+
+</ion-grid>
+
+
+
+</div>
+
+
+
+
+
+
+
+</ion-content>
